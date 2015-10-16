@@ -15,11 +15,12 @@
 #include <cstddef>   // ptrdiff_t, size_t
 #include <new>       // bad_alloc, new
 #include <stdexcept> // invalid_argument
+#include <cmath> //abs
 
 // ---------
 // Allocator
 // ---------
-
+using namespace std;
 template <typename T, std::size_t N>
 class Allocator {
     public:
@@ -94,7 +95,11 @@ class Allocator {
          * throw a bad_alloc exception, if N is less than sizeof(T) + (2 * sizeof(int))
          */
         Allocator () {
-            (*this)[0] = 0; // replace!
+            if (N < sizeof(T) + (2 * sizeof(int)))
+                throw bad_alloc();
+            (*this)[0] = N-8; // replace!
+            (*this)[N-1] = N-8;
+           
             // <your code>
             assert(valid());}
 
@@ -117,8 +122,30 @@ class Allocator {
          */
         pointer allocate (size_type n) {
             // <your code>
+            // get alloc_size = n * sizeof(T)
+            // go through the array (from the beginning) + check whether the first positive sentinel is >= alloc_size
+            // put in a new sentinel
+            
+            size_t alloc_size = n * sizeof(T);
+            int index;
+            while (index < N - 4) {
+                if ((*this)[index] >= 0 && abs((*this)[index]) > alloc_size + 8) {
+                    (*this)[index] = -1 * alloc_size;
+                    index += 4;
+                    int old_index = index;
+                    index += sizeof(int) + alloc_size;
+                    (*this)[index] = -1 * alloc_size;
+                    index += 4;
+                    pointer return_value = (pointer)(this + old_index);; 
+                    return return_value; 
+                }
+                else if (abs((*this)[index]) > alloc_size + 8 || (*this)[index] < 0) {
+                    index += abs((*this)[index]);
+                }
+            }
             assert(valid());
-            return nullptr;}             // replace!
+            return 0;} // if there wasn't enough space
+            //return nullptr;}             // replace!
 
         // ---------
         // construct
@@ -145,6 +172,23 @@ class Allocator {
          */
         void deallocate (pointer p, size_type) {
             // <your code>
+            
+            // given p, we want to get the address that p points to (no matter what type of pointer it is)
+            void*  address = static_cast<void *>(p);
+            cout << "is this an address.." << address << endl;
+
+
+
+            // p points at the actual data, so go back 4 bytes to get to the sentinel 1st_sentinel_begin
+            // then change the value to positive 
+            // then skip forward the value of the sentinel to get to the other sentinel 1st_sentinel_end
+            // then change that value to positive
+
+            // skip forward 4 bytes to check for another free space (another positive sentinel)
+                //(there should either be a negative or positive sentinel there)
+            
+            //if there is a positive sentinel 2nd_sentinel_begin, then 1st_sentinel_begin = positive value of that 2nd_sentinel_begin + value of 1st_sentinel_begin + 8 (for absorbing the 1st_sentinel_end and 2nd_sentinel_begin of the other free block)
+            // from there skip forward the value of 2nd_sentinel_begin
             assert(valid());}
 
         // -------

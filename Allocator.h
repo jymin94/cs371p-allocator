@@ -125,18 +125,30 @@ class Allocator {
             // get alloc_size = n * sizeof(T)
             // go through the array (from the beginning) + check whether the first positive sentinel is >= alloc_size
             // put in a new sentinel
-            
-            size_t alloc_size = n * sizeof(T);
-            int index;
+            //cout << "n = " << n << endl; 
+            cout << "START ADDRESS PLS " << this << endl;
+            difference_type alloc_size = n * sizeof(T);
+            int index = 0;
             while (index < N - 4) {
                 if ((*this)[index] >= 0 && abs((*this)[index]) > alloc_size + 8) {
+                    
                     (*this)[index] = -1 * alloc_size;
+                    cout << index << ": " << &(*this)[index] << endl;
                     index += 4;
-                    int old_index = index;
-                    index += sizeof(int) + alloc_size;
+                    //index++;
+                    pointer old_index = (pointer)&(*this)[index];
+                    index += n * sizeof(int);
+                    //index += sizeof(int) + alloc_size;
                     (*this)[index] = -1 * alloc_size;
-                    index += 4;
-                    pointer return_value = (pointer)(this + old_index);; 
+                    cout << index << ": " << &(*this)[index] << endl;
+                    //index += 4;
+                    index++;
+                    size_t wtf = 4;
+                    pointer return_value = old_index; 
+                   
+                    (*this)[index] -= (alloc_size + 8); // LEL IS DIS RITE DOE
+                    (*this)[N-1] -= (alloc_size + 8);
+                    cout << "hello pointer is " <<  return_value << endl;
                     return return_value; 
                 }
                 else if (abs((*this)[index]) > alloc_size + 8 || (*this)[index] < 0) {
@@ -174,12 +186,14 @@ class Allocator {
             // <your code>
             
             // given p, we want to get the address that p points to (no matter what type of pointer it is)
-            void*  address = static_cast<void *>(p);
-            cout << "is this an address.." << address << endl;
-
-
-
+            //void* address = static_cast<void *>(p);
+            //cout << "is this an address.." << address << endl;
+            
+            cout << "deallocate got address " <<  p << endl;
+            // fuq 
+            cout << *(p) << endl;
             // p points at the actual data, so go back 4 bytes to get to the sentinel 1st_sentinel_begin
+            assert(*(p) < 0);
             // then change the value to positive 
             // then skip forward the value of the sentinel to get to the other sentinel 1st_sentinel_end
             // then change that value to positive

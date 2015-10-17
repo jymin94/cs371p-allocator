@@ -49,6 +49,7 @@ TYPED_TEST(TestAllocator1, test_1) {
     const difference_type s = 1;
     const value_type      v = 2;
     const pointer         p = x.allocate(s);
+  
     if (p != nullptr) {
         x.construct(p, v);
         ASSERT_EQ(v, *p);

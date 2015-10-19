@@ -60,7 +60,7 @@ class Allocator {
         // ----
 
         char a[N];
-
+        
         // -----
         // valid
         // -----
@@ -71,7 +71,17 @@ class Allocator {
          * <your documentation>
          */
         bool valid () const {
-            // <your code>
+            int index = 0;
+            while (index < N) {
+                int left_value = (*this)[index];
+            //    cout << index << ": " << left_value << endl;
+                index += 4 + abs(left_value);
+                int right_value = (*this)[index];
+              //  cout << index << ": " << right_value << endl;
+                if (left_value != right_value)
+                    return false;
+                index += 4;
+            }
             return true;}
 
         /**
@@ -98,7 +108,7 @@ class Allocator {
             if (N < sizeof(T) + (2 * sizeof(int)))
                 throw bad_alloc();
             (*this)[0] = N-8; // replace!
-            (*this)[N-1] = N-8;
+            (*this)[N-4] = N-8;
            
             // <your code>
             assert(valid());}
@@ -107,6 +117,13 @@ class Allocator {
         // Allocator  (const Allocator&);
         // ~Allocator ();
         // Allocator& operator = (const Allocator&);
+/*
+        // get_first_sentinel
+        char* get_sentinel_start (void* p) {
+            char* sentinel = (char*)p;
+
+        }
+*/
 
         // --------
         // allocate
@@ -126,29 +143,44 @@ class Allocator {
             // go through the array (from the beginning) + check whether the first positive sentinel is >= alloc_size
             // put in a new sentinel
             //cout << "n = " << n << endl; 
-            cout << "START ADDRESS PLS " << this << endl;
+
+            //cout << "START ADDRESS PLS " << this << endl;
             difference_type alloc_size = n * sizeof(T);
             int index = 0;
-            while (index < N - 4) {
+            while (index <= N - 4) {
                 if ((*this)[index] >= 0 && abs((*this)[index]) > alloc_size + 8) {
+                    //int* end_sentinel = (int*)&(*this)[index];
+                    //end_sentinel += 1 + (*end_sentinel)/sizeof(int);
                     
+ //                   char* end_sentinel = (char*)&(*this)[index];
+//                    end_sentinel += 4 + (*this)[index];
+//                   cout << "END: " << static_cast<void*>(end_sentinel) << endl;
+                    int first_sentinel_value = (*this)[index];
+                    assert (first_sentinel_value != 0);
+                    //int*  end_first_sentinel = &(*this)[index + first_sentinel_value + 4];
+                    //cout << end_first_sentinel << endl;
+                    int end_idx = index + first_sentinel_value + 4;
+                    //cout << &(*this)[end_idx] << endl;
+                   // cout << &(*this)[N-4] << endl;
+                    //cout << "N is " << N << endl;
+                    //cout << "alloc_size: " << alloc_size << endl;
                     (*this)[index] = -1 * alloc_size;
-                    cout << index << ": " << &(*this)[index] << endl;
+                    //cout << index << ": " << (*this)[index] << endl;
                     index += 4;
                     //index++;
                     pointer old_index = (pointer)&(*this)[index];
-                    index += n * sizeof(int);
+                    index += n * sizeof(T);
                     //index += sizeof(int) + alloc_size;
                     (*this)[index] = -1 * alloc_size;
-                    cout << index << ": " << &(*this)[index] << endl;
-                    //index += 4;
-                    index++;
-                    size_t wtf = 4;
+                    //cout << index << ": " << (*this)[index] << endl;
+                    index += 4;
                     pointer return_value = old_index; 
                    
-                    (*this)[index] -= (alloc_size + 8); // LEL IS DIS RITE DOE
-                    (*this)[N-1] -= (alloc_size + 8);
-                    cout << "hello pointer is " <<  return_value << endl;
+                    (*this)[index] = N - (alloc_size + 16); // LEL IS DIS RITE DOE
+                    //cout << index  << ": " << (*this)[index] << endl;
+                    (*this)[end_idx] = N - (alloc_size + 16);
+                    //cout << end_idx << ": " << (*this)[end_idx] << endl;
+                    //cout << "hello pointer is " <<  return_value << endl;
                     return return_value; 
                 }
                 else if (abs((*this)[index]) > alloc_size + 8 || (*this)[index] < 0) {
@@ -158,7 +190,7 @@ class Allocator {
             assert(valid());
             return 0;} // if there wasn't enough space
             //return nullptr;}             // replace!
-
+       
         // ---------
         // construct
         // ---------
@@ -183,26 +215,34 @@ class Allocator {
          * <your documentation>
          */
         void deallocate (pointer p, size_type) {
-            // <your code>
-            
             // given p, we want to get the address that p points to (no matter what type of pointer it is)
             //void* address = static_cast<void *>(p);
             //cout << "is this an address.." << address << endl;
+            int* address = (int*)p; // bc we're at a sentinel which is type int
+             // p points at the actual data, so go back 4 bytes to get to the sentinel 1st_sentinel_begin
+            address--;
+            int* first_sentinel_p = address;
+            *first_sentinel_p = abs(*first_sentinel_p);
+            address += 1 + *address/sizeof(int);
+            int* end_sentinel_p = address; 
+            *address = abs(*address); 
+            assert (*first_sentinel_p == *address);
+            address++;
+            //PLS TEST THE COALESCES
+            // COALESCE BACK
+            if (address < (int*)&(*this)[N] && *address > 0) {
+                *first_sentinel_p += *address + 8;
+                address+= 1 + *address/sizeof(int);
+                *address = *first_sentinel_p;
+            }
             
-            cout << "deallocate got address " <<  p << endl;
-            // fuq 
-            cout << *(p) << endl;
-            // p points at the actual data, so go back 4 bytes to get to the sentinel 1st_sentinel_begin
-            assert(*(p) < 0);
-            // then change the value to positive 
-            // then skip forward the value of the sentinel to get to the other sentinel 1st_sentinel_end
-            // then change that value to positive
-
-            // skip forward 4 bytes to check for another free space (another positive sentinel)
-                //(there should either be a negative or positive sentinel there)
-            
-            //if there is a positive sentinel 2nd_sentinel_begin, then 1st_sentinel_begin = positive value of that 2nd_sentinel_begin + value of 1st_sentinel_begin + 8 (for absorbing the 1st_sentinel_end and 2nd_sentinel_begin of the other free block)
-            // from there skip forward the value of 2nd_sentinel_begin
+            address = (int*)p;
+            // COALESCE FRONT
+            if (--address > (int*)&(*this) && *address > 0) {
+                *end_sentinel_p += *address + 8;
+                address -= (1 + *address/sizeof(int));
+                *address = *end_sentinel_p;
+            }
             assert(valid());}
 
         // -------

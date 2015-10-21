@@ -74,12 +74,15 @@ class Allocator {
             int index = 0;
             while (index < N) {
                 int left_value = (*this)[index];
-            //    cout << index << ": " << left_value << endl;
+             //   cout << index << ": " << left_value << endl;
                 index += 4 + abs(left_value);
                 int right_value = (*this)[index];
-              //  cout << index << ": " << right_value << endl;
-                if (left_value != right_value)
+                assert(left_value != 0 && right_value != 0);
+               // cout << index << ": " << right_value << endl;
+                if (left_value != right_value) {
+                    //cout << left_value << " != " << right_value << endl;
                     return false;
+                }
                 index += 4;
             }
             return true;}
@@ -90,7 +93,29 @@ class Allocator {
          * <your documentation>
          * https://code.google.com/p/googletest/wiki/AdvancedGuide#Private_Class_Members
          */
-        FRIEND_TEST(TestAllocator2, index);
+       // FRIEND_TEST(TestAllocator2, index);
+        
+        // FOR NICOLE'S TEST
+        FRIEND_TEST(TestAllocator2, index_1);
+        FRIEND_TEST(TestAllocator2, index_2);
+        FRIEND_TEST(TestAllocator2, index_3);
+
+        FRIEND_TEST(TestAllocator2, default_constructor_1);
+        FRIEND_TEST(TestAllocator2, default_constructor_2);
+        FRIEND_TEST(TestAllocator2, default_constructor_3);
+
+        FRIEND_TEST(AllocateFixture, allocate_1);
+        FRIEND_TEST(AllocateFixture, allocate_2);
+        FRIEND_TEST(AllocateFixture, allocate_3);
+
+        FRIEND_TEST(DeallocateFixture, deallocate_1);
+        FRIEND_TEST(DeallocateFixture, deallocate_2);
+        FRIEND_TEST(DeallocateFixture, deallocate_3);
+
+        FRIEND_TEST(TestAllocator2, valid_1);
+        FRIEND_TEST(TestAllocator2, valid_2);
+        FRIEND_TEST(TestAllocator2, valid_3);
+
         int& operator [] (int i) {
             return *reinterpret_cast<int*>(&a[i]);}
 
@@ -138,58 +163,43 @@ class Allocator {
          * throw a bad_alloc exception, if n is invalid
          */
         pointer allocate (size_type n) {
-            // <your code>
-            // get alloc_size = n * sizeof(T)
-            // go through the array (from the beginning) + check whether the first positive sentinel is >= alloc_size
-            // put in a new sentinel
-            //cout << "n = " << n << endl; 
-
-            //cout << "START ADDRESS PLS " << this << endl;
+            if (n == 0)
+                return nullptr;
             difference_type alloc_size = n * sizeof(T);
+            if (N < sizeof(T) + (2 * sizeof(int)))
+                throw bad_alloc();
             int index = 0;
+            assert ((*this)[index] != 0 && (*this)[N-4] != 0);
             while (index <= N - 4) {
-                if ((*this)[index] >= 0 && abs((*this)[index]) > alloc_size + 8) {
-                    //int* end_sentinel = (int*)&(*this)[index];
-                    //end_sentinel += 1 + (*end_sentinel)/sizeof(int);
-                    
- //                   char* end_sentinel = (char*)&(*this)[index];
-//                    end_sentinel += 4 + (*this)[index];
-//                   cout << "END: " << static_cast<void*>(end_sentinel) << endl;
+                if ((*this)[index] >= 0 && abs((*this)[index]) >= alloc_size) {
                     int first_sentinel_value = (*this)[index];
                     assert (first_sentinel_value != 0);
-                    //int*  end_first_sentinel = &(*this)[index + first_sentinel_value + 4];
-                    //cout << end_first_sentinel << endl;
                     int end_idx = index + first_sentinel_value + 4;
-                    //cout << &(*this)[end_idx] << endl;
-                   // cout << &(*this)[N-4] << endl;
-                    //cout << "N is " << N << endl;
-                    //cout << "alloc_size: " << alloc_size << endl;
                     (*this)[index] = -1 * alloc_size;
-                    //cout << index << ": " << (*this)[index] << endl;
                     index += 4;
-                    //index++;
                     pointer old_index = (pointer)&(*this)[index];
                     index += n * sizeof(T);
-                    //index += sizeof(int) + alloc_size;
                     (*this)[index] = -1 * alloc_size;
-                    //cout << index << ": " << (*this)[index] << endl;
                     index += 4;
                     pointer return_value = old_index; 
-                   
-                    (*this)[index] = N - (alloc_size + 16); // LEL IS DIS RITE DOE
-                    //cout << index  << ": " << (*this)[index] << endl;
-                    (*this)[end_idx] = N - (alloc_size + 16);
-                    //cout << end_idx << ": " << (*this)[end_idx] << endl;
-                    //cout << "hello pointer is " <<  return_value << endl;
+                  
+                    if (index <= N-4) {
+                        (*this)[index] = (N - index) - 8;
+                        (*this)[end_idx] = (N - index)- 8;
+                    }
                     return return_value; 
                 }
-                else if (abs((*this)[index]) > alloc_size + 8 || (*this)[index] < 0) {
-                    index += abs((*this)[index]);
+                else if ((*this)[index] < 0) {
+                    index += abs((*this)[index]) + 8;
+                    if (index > N-4 || abs((*this)[index]) < alloc_size) {
+                        throw bad_alloc();
+                    }
                 }
+                else 
+                    throw bad_alloc();
             }
             assert(valid());
-            return 0;} // if there wasn't enough space
-            //return nullptr;}             // replace!
+            throw bad_alloc();}      // if there wasn't enough space
        
         // ---------
         // construct
@@ -215,35 +225,41 @@ class Allocator {
          * <your documentation>
          */
         void deallocate (pointer p, size_type) {
-            // given p, we want to get the address that p points to (no matter what type of pointer it is)
-            //void* address = static_cast<void *>(p);
-            //cout << "is this an address.." << address << endl;
-            int* address = (int*)p; // bc we're at a sentinel which is type int
-             // p points at the actual data, so go back 4 bytes to get to the sentinel 1st_sentinel_begin
-            address--;
-            int* first_sentinel_p = address;
-            *first_sentinel_p = abs(*first_sentinel_p);
-            address += 1 + *address/sizeof(int);
-            int* end_sentinel_p = address; 
-            *address = abs(*address); 
-            assert (*first_sentinel_p == *address);
-            address++;
-            //PLS TEST THE COALESCES
-            // COALESCE BACK
-            if (address < (int*)&(*this)[N] && *address > 0) {
-                *first_sentinel_p += *address + 8;
-                address+= 1 + *address/sizeof(int);
-                *address = *first_sentinel_p;
-            }
+            if (p == 0)
+                throw invalid_argument("p is wrong");
+            size_t addr = reinterpret_cast<size_t>(p);
+            size_t this_addr = reinterpret_cast<size_t>(this);
             
-            address = (int*)p;
-            // COALESCE FRONT
-            if (--address > (int*)&(*this) && *address > 0) {
-                *end_sentinel_p += *address + 8;
-                address -= (1 + *address/sizeof(int));
-                *address = *end_sentinel_p;
+            int index = addr - this_addr;
+            index -= 4;
+            if ((*this)[index] >= 0)
+                throw bad_alloc();
+            int first_sent_idx = index;
+            (*this)[first_sent_idx] = abs((*this)[first_sent_idx]);
+            index += 4 + (*this)[index];
+            int end_sent_idx = index;
+            (*this)[end_sent_idx] = abs((*this)[index]);
+            assert ((*this)[first_sent_idx] == (*this)[index]);
+            int right_co_idx = index + 4;
+            // coalescing to the right 
+            while (right_co_idx < N - 8 && (*this)[right_co_idx] > 0) {
+                assert((*this)[first_sent_idx] > 0);
+                (*this)[first_sent_idx] += 8 + (*this)[right_co_idx];
+                right_co_idx += 4 + (*this)[right_co_idx];
+                (*this)[right_co_idx] = (*this)[first_sent_idx];
+                end_sent_idx = right_co_idx;
+                right_co_idx += 4;
             }
-            assert(valid());}
+            // coalescing to the left  
+            int front_index = first_sent_idx - 4;
+            while (front_index > 8 && (*this)[front_index] > 0) {
+                assert((*this)[end_sent_idx] > 0);
+                front_index -= (4 + (*this)[front_index]);
+                (*this)[front_index] += 8 + (*this)[first_sent_idx];
+                (*this)[end_sent_idx] = (*this)[front_index]; 
+                front_index -= 4;
+            }
+           assert(valid());}
 
         // -------
         // destroy

@@ -1,0 +1,89 @@
+commit 43532b929135990bee24312f33237f4caba74d0e
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 22 17:03:29 2015 -0500
+
+    updated makefile.. again
+
+commit 390148d7495adf36b00b1ef60dfd801c0bd84320
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 22 16:56:08 2015 -0500
+
+    EID tests are not supposed to be in this repo
+
+commit fe1590f87db6c4447d04eab6e179a046b42bf8c9
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 22 16:54:38 2015 -0500
+
+    added .gitignore
+
+commit 1c886e47ce50c30871db0bfbc77af16f519fc688
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 22 16:51:54 2015 -0500
+
+    Updated the makefile. Resolves #15
+
+commit ee2d940447cd8b2caad4e01540fa637b984e652c
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 22 16:47:43 2015 -0500
+
+    Done!
+
+commit bde9d5aa79f5a6a36e0cffbf1cb27f9dbdddfab3
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 22 16:16:54 2015 -0500
+
+    Wrote tests. Resolves #12
+
+commit 7b1fd42f29ea04c44344668271653fd5e91d7e04
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Tue Oct 20 20:46:13 2015 -0500
+
+    Updated Allocator.h so it runs the regular tests
+
+commit 2660d8f849d9efd09d56901ff592f00273be79c4
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Tue Oct 20 20:40:59 2015 -0500
+
+    Allocator.h is beautiful <3
+
+commit 21dd40e39d4ba567a8197fe81844fb424814f198
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Mon Oct 19 18:37:13 2015 -0500
+
+    Fixed the makefile and travis.yml
+
+commit e167c89b39d5e8e92bec5c38bb43aee4ad390320
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Mon Oct 19 18:35:05 2015 -0500
+
+    updated makefile. Fixes #9
+
+commit 2b0755ddebc1d5475d0880566a53e217e538e1e0
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Mon Oct 19 18:26:37 2015 -0500
+
+    Finished valid()
+
+commit 78a11cb621c0b16cf4690a8b866949cfee6840ee
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Sat Oct 17 00:03:28 2015 -0500
+
+    lel learned pointer arithmetic today heh
+
+commit f97a4e2cd9e32f28fa32a8024522097933da9529
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Fri Oct 16 10:53:44 2015 -0500
+
+    Written allocate, wrote plan for deallocate, fixed one test in TestAllocator.c++
+
+commit dde6dbbecb0ec793c4c5c41bcef6e5c6d80eeccc
+Author: JiYoung Min <jymin94@cs.utexas.edu>
+Date:   Thu Oct 15 00:03:23 2015 -0500
+
+    Added files into repo!
+
+commit f4a797b0835ea0dc72935d6f552cc9dec407d20d
+Author: JiYoung Min <jymin94@utexas.edu>
+Date:   Sun Oct 11 18:00:43 2015 -0500
+
+    Initial commit

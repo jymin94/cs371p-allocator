@@ -1,0 +1,6 @@
+var searchData=
+[
+  ['deallocate',['deallocate',['../classAllocator.html#a8823b257191f53d7f1efac9332d8f61a',1,'Allocator']]],
+  ['destroy',['destroy',['../structdestroy.html',1,'destroy'],['../classAllocator.html#af156a6a50a8c62c70e40cf342a3b64cb',1,'Allocator::destroy()'],['../structdestroy.html#a92aa70839479110af3ab0e4105ac42ef',1,'destroy::destroy()']]],
+  ['difference_5ftype',['difference_type',['../classAllocator.html#a6b650764260187e63d5098f5f38046c2',1,'Allocator::difference_type()'],['../structTestAllocator.html#ac3c65cec130a0c773dba9cd64477b72d',1,'TestAllocator::difference_type()'],['../structTestAllocator1.html#a924037bbc23440e57e84a01520ab8557',1,'TestAllocator1::difference_type()'],['../structTestAllocator3.html#a36267a2cb639463d68e85ceb3fa54dd1',1,'TestAllocator3::difference_type()'],['../structTestAllocator1.html#a924037bbc23440e57e84a01520ab8557',1,'TestAllocator1::difference_type()'],['../structTestAllocator3.html#a36267a2cb639463d68e85ceb3fa54dd1',1,'TestAllocator3::difference_type()'],['../structTestAllocator1.html#a924037bbc23440e57e84a01520ab8557',1,'TestAllocator1::difference_type()'],['../structTestAllocator3.html#a36267a2cb639463d68e85ceb3fa54dd1',1,'TestAllocator3::difference_type()']]]
+];

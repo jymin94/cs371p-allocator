@@ -1,0 +1,9 @@
+# http://git-scm.com/docs/gitignore/
+
+*.gcda
+*.gcno
+*.gcov
+
+Doxyfile
+latex/
+allocator-tests/

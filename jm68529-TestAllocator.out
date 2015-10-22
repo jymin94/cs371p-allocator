@@ -1,0 +1,88 @@
+Running main() from gtest_main.cc
+[==========] Running 29 tests from 8 test cases.
+[----------] Global test environment set-up.
+[----------] 2 tests from TestAllocator1/0, where TypeParam = std::allocator<int>
+[ RUN      ] TestAllocator1/0.test_1
+[       OK ] TestAllocator1/0.test_1 (0 ms)
+[ RUN      ] TestAllocator1/0.test_10
+[       OK ] TestAllocator1/0.test_10 (0 ms)
+[----------] 2 tests from TestAllocator1/0 (0 ms total)
+
+[----------] 2 tests from TestAllocator1/1, where TypeParam = std::allocator<double>
+[ RUN      ] TestAllocator1/1.test_1
+[       OK ] TestAllocator1/1.test_1 (0 ms)
+[ RUN      ] TestAllocator1/1.test_10
+[       OK ] TestAllocator1/1.test_10 (0 ms)
+[----------] 2 tests from TestAllocator1/1 (0 ms total)
+
+[----------] 2 tests from TestAllocator1/2, where TypeParam = Allocator<int, 100ul>
+[ RUN      ] TestAllocator1/2.test_1
+[       OK ] TestAllocator1/2.test_1 (1 ms)
+[ RUN      ] TestAllocator1/2.test_10
+[       OK ] TestAllocator1/2.test_10 (0 ms)
+[----------] 2 tests from TestAllocator1/2 (1 ms total)
+
+[----------] 2 tests from TestAllocator1/3, where TypeParam = Allocator<double, 100ul>
+[ RUN      ] TestAllocator1/3.test_1
+[       OK ] TestAllocator1/3.test_1 (0 ms)
+[ RUN      ] TestAllocator1/3.test_10
+[       OK ] TestAllocator1/3.test_10 (0 ms)
+[----------] 2 tests from TestAllocator1/3 (0 ms total)
+
+[----------] 2 tests from TestAllocator2
+[ RUN      ] TestAllocator2.const_index
+[       OK ] TestAllocator2.const_index (0 ms)
+[ RUN      ] TestAllocator2.index
+[       OK ] TestAllocator2.index (0 ms)
+[----------] 2 tests from TestAllocator2 (0 ms total)
+
+[----------] 2 tests from TestAllocator3/0, where TypeParam = Allocator<int, 100ul>
+[ RUN      ] TestAllocator3/0.test_1
+[       OK ] TestAllocator3/0.test_1 (0 ms)
+[ RUN      ] TestAllocator3/0.test_10
+[       OK ] TestAllocator3/0.test_10 (0 ms)
+[----------] 2 tests from TestAllocator3/0 (0 ms total)
+
+[----------] 2 tests from TestAllocator3/1, where TypeParam = Allocator<double, 100ul>
+[ RUN      ] TestAllocator3/1.test_1
+[       OK ] TestAllocator3/1.test_1 (0 ms)
+[ RUN      ] TestAllocator3/1.test_10
+[       OK ] TestAllocator3/1.test_10 (0 ms)
+[----------] 2 tests from TestAllocator3/1 (0 ms total)
+
+[----------] 15 tests from ProjAllocator
+[ RUN      ] ProjAllocator.ConstructorDefault
+[       OK ] ProjAllocator.ConstructorDefault (0 ms)
+[ RUN      ] ProjAllocator.ConstructorOdd
+[       OK ] ProjAllocator.ConstructorOdd (0 ms)
+[ RUN      ] ProjAllocator.ConstructorTooSmall
+[       OK ] ProjAllocator.ConstructorTooSmall (0 ms)
+[ RUN      ] ProjAllocator.Valid1
+[       OK ] ProjAllocator.Valid1 (0 ms)
+[ RUN      ] ProjAllocator.Valid2
+[       OK ] ProjAllocator.Valid2 (0 ms)
+[ RUN      ] ProjAllocator.ValidFalse
+[       OK ] ProjAllocator.ValidFalse (0 ms)
+[ RUN      ] ProjAllocator.Valid3
+[       OK ] ProjAllocator.Valid3 (0 ms)
+[ RUN      ] ProjAllocator.AllocateDeallocate1
+[       OK ] ProjAllocator.AllocateDeallocate1 (0 ms)
+[ RUN      ] ProjAllocator.AllocateDeallocate2
+[       OK ] ProjAllocator.AllocateDeallocate2 (0 ms)
+[ RUN      ] ProjAllocator.AllocateNoSpace
+[       OK ] ProjAllocator.AllocateNoSpace (0 ms)
+[ RUN      ] ProjAllocator.AllocateBigger
+[       OK ] ProjAllocator.AllocateBigger (0 ms)
+[ RUN      ] ProjAllocator.AllocateDoubles
+[       OK ] ProjAllocator.AllocateDoubles (0 ms)
+[ RUN      ] ProjAllocator.DeallocateWrongPointer1
+[       OK ] ProjAllocator.DeallocateWrongPointer1 (0 ms)
+[ RUN      ] ProjAllocator.DeallocateWrongPointer2
+[       OK ] ProjAllocator.DeallocateWrongPointer2 (0 ms)
+[ RUN      ] ProjAllocator.Deallocate1
+[       OK ] ProjAllocator.Deallocate1 (0 ms)
+[----------] 15 tests from ProjAllocator (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 29 tests from 8 test cases ran. (1 ms total)
+[  PASSED  ] 29 tests.

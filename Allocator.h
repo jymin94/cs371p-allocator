@@ -60,7 +60,13 @@ class Allocator {
         // ----
 
         char a[N];
-        
+
+        int& view (int i) {
+            if (i < 0) {
+                i = -i;
+            }
+            return *reinterpret_cast<int*>(&a[i]);
+        }
         // -----
         // valid
         // -----
@@ -74,13 +80,10 @@ class Allocator {
             int index = 0;
             while (index < N) {
                 int left_value = (*this)[index];
-             //   cout << index << ": " << left_value << endl;
                 index += 4 + abs(left_value);
                 int right_value = (*this)[index];
                 assert(left_value != 0 && right_value != 0);
-               // cout << index << ": " << right_value << endl;
                 if (left_value != right_value) {
-                    //cout << left_value << " != " << right_value << endl;
                     return false;
                 }
                 index += 4;
@@ -93,8 +96,111 @@ class Allocator {
          * <your documentation>
          * https://code.google.com/p/googletest/wiki/AdvancedGuide#Private_Class_Members
          */
-        FRIEND_TEST(TestAllocator2, index);
 
+         FRIEND_TEST(ProjAllocator, ConstructorDefault);
+         FRIEND_TEST(ProjAllocator, ConstructorOdd);
+         FRIEND_TEST(ProjAllocator, ConstructorTooSmall);
+         FRIEND_TEST(ProjAllocator, Valid1);
+         FRIEND_TEST(ProjAllocator, Valid2);
+         FRIEND_TEST(ProjAllocator, ValidFalse);
+         FRIEND_TEST(ProjAllocator, Valid3);
+         FRIEND_TEST(ProjAllocator, AllocateDeallocate1);
+         FRIEND_TEST(ProjAllocator, AllocateDeallocate2);
+         FRIEND_TEST(ProjAllocator, AllocateNoSpace);
+         FRIEND_TEST(ProjAllocator, AllocateBigger);
+         FRIEND_TEST(ProjAllocator, AllocateDoubles);
+         FRIEND_TEST(ProjAllocator, DeallocateWrongPointer1);
+         FRIEND_TEST(ProjAllocator, DeallocateWrongPointer2);
+         FRIEND_TEST(ProjAllocator, Deallocate1);
+/*
+         //Claudio's tests
+         FRIEND_TEST(MyAllocator, Constructor);
+         FRIEND_TEST(MyAllocator, AllocateInt);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall1);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall2);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall3);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall4);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall5);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall6);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall7);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall8);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall9);
+         FRIEND_TEST(MyAllocator, AllocateRemainingBlockTooSmall10);
+         FRIEND_TEST(MyAllocator, DeallocateCollesceInt);
+         FRIEND_TEST(MyAllocator, DeallocateCollesceInt2);
+         FRIEND_TEST(MyAllocator, DeallocateCollesceInt3);
+         FRIEND_TEST(MyAllocator, AllocateFull);
+         FRIEND_TEST(MyAllocator, AllocateFull2);
+         FRIEND_TEST(MyAllocator, AllocateNearFull);
+         FRIEND_TEST(MyAllocator, AllocateFullConstructor);
+         FRIEND_TEST(MyAllocator, Allocate7);
+         FRIEND_TEST(MyAllocator, Allocate8);
+
+         FRIEND_TEST(MyAllocator, AllocateNone);
+         FRIEND_TEST(MyAllocator, AllocateOdd);
+         FRIEND_TEST(MyAllocator, AllocMoreThanAllocator);
+         FRIEND_TEST(MyAllocator, AllocMoreThanAllocator2);
+         FRIEND_TEST(MyAllocator, AllocMoreThanAllocator3);
+         FRIEND_TEST(MyAllocator, badDeallocate);
+         FRIEND_TEST(MyAllocator, CoallescingL);
+         FRIEND_TEST(MyAllocator, CoallescingR);
+*/
+/*
+
+
+
+
+        FRIEND_TEST(TestAllocator2, index);
+        FRIEND_TEST(TestAllocator4, Allocator_1);
+        FRIEND_TEST(TestAllocator4, Allocator_2);
+        FRIEND_TEST(TestAllocator4, Allocator_3);
+        FRIEND_TEST(TestAllocator4, Allocator_4);
+        FRIEND_TEST(TestAllocator4, Allocator_5);
+        FRIEND_TEST(TestAllocator4, Allocator_6);
+        FRIEND_TEST(TestAllocator4, Allocator_7);
+        FRIEND_TEST(TestAllocator4, allocate_1);
+        FRIEND_TEST(TestAllocator4, allocate_2);
+        FRIEND_TEST(TestAllocator4, allocate_3);
+        FRIEND_TEST(TestAllocator4, allocate_4);
+        FRIEND_TEST(TestAllocator4, allocate_5);
+        FRIEND_TEST(TestAllocator4, allocate_6);
+        FRIEND_TEST(TestAllocator4, allocate_7);
+        FRIEND_TEST(TestAllocator4, allocate_8);
+        FRIEND_TEST(TestAllocator4, allocate_9);
+        FRIEND_TEST(TestAllocator4, deallocate_1);
+        FRIEND_TEST(TestAllocator4, deallocate_2);
+        FRIEND_TEST(TestAllocator4, deallocate_3);
+        FRIEND_TEST(TestAllocator4, deallocate_4);
+        FRIEND_TEST(TestAllocator4, deallocate_5);
+        FRIEND_TEST(TestAllocator4, deallocate_6);
+        FRIEND_TEST(TestAllocator4, deallocate_7);
+        FRIEND_TEST(TestAllocatorBlock, getBlockFromPtr_1);
+        FRIEND_TEST(TestAllocatorBlock, getBlockFromPtr_2);
+        FRIEND_TEST(TestAllocatorBlock, getBlockFromPtr_3);
+        FRIEND_TEST(TestAllocatorBlock, getFoot_1);
+        FRIEND_TEST(TestAllocatorBlock, getFoot_2);
+        FRIEND_TEST(TestAllocatorBlock, getFoot_3);
+        FRIEND_TEST(TestAllocatorBlock, getHead_1);
+        FRIEND_TEST(TestAllocatorBlock, getHead_2);
+        FRIEND_TEST(TestAllocatorBlock, getHead_3);
+        FRIEND_TEST(TestAllocatorBlock, getHead_4);
+        FRIEND_TEST(TestAllocatorBlock, getNext_1);
+        FRIEND_TEST(TestAllocatorBlock, getNext_2);
+        FRIEND_TEST(TestAllocatorBlock, getNext_3);
+        FRIEND_TEST(TestAllocatorBlock, getPrev_1);
+        FRIEND_TEST(TestAllocatorBlock, getPrev_2);
+        FRIEND_TEST(TestAllocatorBlock, getPrev_3);
+        FRIEND_TEST(TestAllocatorBlock, getSize_1);
+        FRIEND_TEST(TestAllocatorBlock, getSize_2);
+        FRIEND_TEST(TestAllocatorBlock, getSize_3);
+        FRIEND_TEST(TestAllocatorBlock, getUserPtr_1);
+        FRIEND_TEST(TestAllocatorBlock, getUserPtr_2);
+        FRIEND_TEST(TestAllocatorBlock, getUserPtr_3);
+        FRIEND_TEST(TestAllocatorBlock, makeUsed_1);
+        FRIEND_TEST(TestAllocatorBlock, makeUsed_2);
+        FRIEND_TEST(TestAllocatorBlock, makeUsed_3);
+        */
+        FRIEND_TEST(TestAllocator2, index);
         int& operator [] (int i) {
             return *reinterpret_cast<int*>(&a[i]);}
 
@@ -145,37 +251,52 @@ class Allocator {
             if (n == 0)
                 return nullptr;
             difference_type alloc_size = n * sizeof(T);
-            if (N < sizeof(T) + (2 * sizeof(int)))
+            if (N < sizeof(T) + (2 * sizeof(int))) {
                 throw bad_alloc();
+            }
             int index = 0;
             assert ((*this)[index] != 0 && (*this)[N-4] != 0);
             while (index <= N - 4) {
+                // need to check that the rest of the section of the free block can be given
                 if ((*this)[index] >= 0 && abs((*this)[index]) >= alloc_size) {
-                    int first_sentinel_value = (*this)[index];
-                    assert (first_sentinel_value != 0);
-                    int end_idx = index + first_sentinel_value + 4;
-                    (*this)[index] = -1 * alloc_size;
+                    int left_sent_value = (*this)[index];
+                    assert (left_sent_value != 0);
+                    int right_idx_og = index + left_sent_value + 4;
+                    int left_idx = index;
+                    (*this)[left_idx] = -1 * alloc_size;
                     index += 4;
-                    pointer old_index = (pointer)&(*this)[index];
-                    index += n * sizeof(T);
-                    (*this)[index] = -1 * alloc_size;
-                    index += 4;
-                    pointer return_value = old_index; 
-                  
-                    if (index <= N-4) {
-                        (*this)[index] = (N - index) - 8;
-                        (*this)[end_idx] = (N - index)- 8;
+                    pointer return_idx = (pointer)&(*this)[index];
+                    index += alloc_size;
+                    int right_idx_new = index;
+                    int diff = right_idx_og - right_idx_new;
+                    bool more_than_enough = false;
+                    if (diff >= (8 + sizeof(T))) {
+                        (*this)[right_idx_new] = -1 * alloc_size;
+                        index += 4;
                     }
-                    return return_value; 
+                    else {
+                        int right_og_value = -1 * (*this)[right_idx_og];
+                        (*this)[right_idx_og] = right_og_value;
+                        (*this)[left_idx] = (*this)[right_idx_og];
+                        index = right_idx_og + 4;
+                        more_than_enough = true;
+                    }
+
+                  
+                    if (index <= N-4 && !more_than_enough) {
+                        (*this)[index] = (*this)[right_idx_og] - (8 + abs((*this)[index - 4]));
+                        (*this)[right_idx_og] = (*this)[index];
+                    }
+                    return return_idx; 
                 }
-                else if ((*this)[index] < 0) {
-                    index += abs((*this)[index]) + 8;
+                else {
+                    while ((*this)[index] < 0 && index <= N-4) {
+                        index += abs((*this)[index]) + 8;
+                    }
                     if (index > N-4 || abs((*this)[index]) < alloc_size) {
                         throw bad_alloc();
                     }
-                }
-                else 
-                    throw bad_alloc();
+               }
             }
             assert(valid());
             throw bad_alloc();}      // if there wasn't enough space
@@ -212,7 +333,7 @@ class Allocator {
             int index = addr - this_addr;
             index -= 4;
             if ((*this)[index] >= 0)
-                throw bad_alloc();
+                throw invalid_argument("p is wrong");
             int first_sent_idx = index;
             (*this)[first_sent_idx] = abs((*this)[first_sent_idx]);
             index += 4 + (*this)[index];

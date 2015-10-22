@@ -1,7 +1,7 @@
 FILES :=                                   \
     .travis.yml                            \
-    allocator-tests/jm68529-TestAllocator.c++ \
-    allocator-tests/jm68529-TestAllocator.out \
+    ../allocator-tests/jm68529-TestAllocator.c++ \
+    ../allocator-tests/jm68529-TestAllocator.out \
     Allocator.h                            \
     Allocator.log                          \
     html                                   \

@@ -208,16 +208,34 @@ TEST(ProjAllocator, ValidFalse) {
     ASSERT_FALSE(x.valid());
 }
 
+TEST(ProjAllocator, Valid3) {
+    Allocator<int, 100> x;
+    ASSERT_TRUE(x.valid());
+}
+
+TEST(ProjAllocator, AllocateDeallocate1) {
+    Allocator<double, 24> x;
+    double *a = x.allocate(2);
+    x.deallocate(a, 2);
+    ASSERT_EQ(x[0], 16);
+    ASSERT_EQ(x[20], 16);
+}
+
+TEST(ProjAllocator, AllocateDeallocate2) {
+    Allocator<double, 100> x;
+    double *a = x.allocate(1);
+    double *b = x.allocate(1);
+    x.deallocate(b, 2);
+    ASSERT_EQ(x[16], 76);
+    x.deallocate(a, 2);
+    ASSERT_EQ(x[0], 92);
+    ASSERT_EQ(x[96], 92);
+}
+
 TEST(ProjAllocator, AllocateNoSpace) {
-    Allocator<int, 28> x;
-    x.allocate(1);
-    try {
-        x.allocate(1);
-        ASSERT_TRUE(false);
-    }
-    catch (...) {
-        ASSERT_TRUE(true);
-    }
+    Allocator<int, 24> x;
+    x.allocate(4);
+    ASSERT_THROW({x.allocate(4);}, std::bad_alloc);
 }
 
 TEST(ProjAllocator, AllocateBigger) {
@@ -236,4 +254,25 @@ TEST(ProjAllocator, AllocateDoubles) {
     ASSERT_EQ(x[96], -92);
 }
 
+TEST(ProjAllocator, DeallocateWrongPointer1) {
+    Allocator<double, 100> x;
+    ASSERT_THROW({x.deallocate(0, 5);}, std::invalid_argument);
+}
 
+
+TEST(ProjAllocator, DeallocateWrongPointer2) {
+    Allocator<int, 100> x;
+    int *a = x.allocate(2);
+    x.construct(a, 4);
+    x.construct(a+1, 4);
+    ASSERT_THROW({x.deallocate(++a, 5);}, std:: invalid_argument);
+}
+
+TEST(ProjAllocator, Deallocate1) {
+    Allocator<int, 64> x;
+    x.allocate(1);
+    int *a = x.allocate(2);
+    x.deallocate(a, 2);
+    ASSERT_EQ(x[12], 44);
+    ASSERT_EQ(x[60], 44);
+}

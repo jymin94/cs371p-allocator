@@ -210,8 +210,7 @@ TEST(ProjAllocator, ValidFalse) {
 
 TEST(ProjAllocator, Valid3) {
     Allocator<int, 100> x;
-    x[0] = -1;
-    ASSERT_FALSE(x.valid());
+    ASSERT_TRUE(x.valid());
 }
 
 TEST(ProjAllocator, AllocateDeallocate1) {
@@ -234,10 +233,9 @@ TEST(ProjAllocator, AllocateDeallocate2) {
 }
 
 TEST(ProjAllocator, AllocateNoSpace) {
-    Allocator<int, 28> x;
-    x.allocate(1);
-    x.allocate(1);
-    ASSERT_THROW({x.allocate(1);}, std::bad_alloc);
+    Allocator<int, 24> x;
+    x.allocate(4);
+    ASSERT_THROW({x.allocate(4);}, std::bad_alloc);
 }
 
 TEST(ProjAllocator, AllocateBigger) {
@@ -265,8 +263,9 @@ TEST(ProjAllocator, DeallocateWrongPointer1) {
 TEST(ProjAllocator, DeallocateWrongPointer2) {
     Allocator<int, 100> x;
     int *a = x.allocate(2);
-    ++a;
-    ASSERT_THROW({x.deallocate(a, 5);}, std:: invalid_argument);
+    x.construct(a, 4);
+    x.construct(a+1, 4);
+    ASSERT_THROW({x.deallocate(++a, 5);}, std:: invalid_argument);
 }
 
 TEST(ProjAllocator, Deallocate1) {

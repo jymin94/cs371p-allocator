@@ -1,7 +1,7 @@
 FILES :=                                   \
     .travis.yml                            \
-    voting-tests/jm68529-TestAllocator.c++ \
-    voting-tests/jm68529-TestAllocator.out \
+    allocator-tests/jm68529-TestAllocator.c++ \
+    allocator-tests/jm68529-TestAllocator.out \
     Allocator.h                            \
     Allocator.log                          \
     html                                   \
@@ -80,4 +80,5 @@ TestAllocator: Allocator.h TestAllocator.c++
 TestAllocator.tmp: TestAllocator
 	$(VALGRIND) ./TestAllocator                                       >  TestAllocator.tmp 2>&1
 	$(GCOV) -b TestAllocator.c++ | grep -A 5 "File 'TestAllocator.c++'" >> TestAllocator.tmp
+	$(GCOV) -b TestAllocator.c++ | grep -A 5 "File 'Allocator.h'" >> TestAllocator.tmp
 	cat TestAllocator.tmp
